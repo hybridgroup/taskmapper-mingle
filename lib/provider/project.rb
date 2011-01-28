@@ -4,9 +4,21 @@ module TicketMaster::Provider
     #
     #
     class Project < TicketMaster::Provider::Base::Project
-      #API = Mingle::Project # The class to access the api's projects
+      API = MingleAPI::Project # The class to access the api's projects
       # declare needed overloaded methods here
-      
+     
+      def created_at
+       @created_at ||= self[:created_at] ? Time.parse(self[:created_at]) : nil
+      end
+
+      def updated_at
+       @updated_at ||= self[:updated_at] ? Time.parse(self[:updated_at]) : nil
+      end
+
+      def initialize(*options)
+        super(*options)
+      end
+
       
       # copy from this.copy(that) copies that into this
       def copy(project)
@@ -17,6 +29,14 @@ module TicketMaster::Provider
             sleep 1
           end
         end
+      end
+
+      def id
+        self[:id]
+      end
+
+      def identifier
+        self[:identifier]
       end
 
     end
