@@ -24,6 +24,7 @@ module MingleAPI
 
       resources.each do |klass|
         klass.site = klass.site_format % (host_format % [protocol, account_format % [username, login], domain_format % [server, "#{port}"]])
+        klass.headers['Content-Type'] = 'application/x-www-form-urlencoded'
       end
     end
 
@@ -32,7 +33,7 @@ module MingleAPI
     end
   end
 
-  self.host_format    = '%s://%s@%s/api/v1'
+  self.host_format    = '%s://%s@%s/api/v2'
   self.account_format = '%s:%s'
   self.domain_format  = '%s:%s'
   self.protocol       = 'http'
@@ -50,14 +51,41 @@ module MingleAPI
   end
 
   class Project < Base
+
+    #begin monkey patches
+
+    def element_path(options = nil)
+       self.class.element_path(self.identifier, options)
+    end
+
+    def encode(options={})
+       val = []
+       attributes.each_pair do |key, value|
+          val << "project[#{URI.escape key}]=#{URI.escape value}" rescue nil
+        end  
+       val.join('&')
+    end
+   
+    def update
+         puts element_path(prefix_options) + '?' + encode
+         connection.put(element_path(prefix_options) + '?' + encode, nil, self.class.headers).tap do |response|
+            load_attributes_from_response(response)
+         end
+    end
+  
+    def create
+        connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
+          self.identifier = id_from_response(response)
+          load_attributes_from_response(response)
+        end
+    end
+
+    #end monkey patches
+ 
     def tickets(options = {})
       Ticket.find(:all, :params => options.update(:identifier => identifier))
     end
     
-    def id
-      @attributes['id']
-    end
-
     def identifier
       @attributes['identifier']
     end
