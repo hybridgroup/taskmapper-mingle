@@ -39,7 +39,6 @@ module MingleAPI
   self.protocol       = 'http'
 
   class Base < ActiveResource::Base
-    self.format = :xml
     def self.inherited(base)
       MingleAPI.resources << base
       class << base
@@ -55,7 +54,7 @@ module MingleAPI
     #begin monkey patches
 
     def element_path(options = nil)
-       self.class.element_path(self.identifier, options)
+       self.class.element_path(self.id, options)
     end
 
     def encode(options={})
@@ -67,6 +66,7 @@ module MingleAPI
     end
    
     def update
+         puts 'update'
          puts element_path(prefix_options) + '?' + encode
          connection.put(element_path(prefix_options) + '?' + encode, nil, self.class.headers).tap do |response|
             load_attributes_from_response(response)
@@ -74,8 +74,9 @@ module MingleAPI
     end
   
     def create
+        puts 'create'
         connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
-          self.identifier = id_from_response(response)
+          self.id = id_from_response(response)
           load_attributes_from_response(response)
         end
     end
@@ -86,9 +87,10 @@ module MingleAPI
       Ticket.find(:all, :params => options.update(:identifier => identifier))
     end
     
-    def identifier
-      @attributes['identifier']
+    def id
+      @attributes['identifier']          
     end
+
   end
 
   class Card < Base
