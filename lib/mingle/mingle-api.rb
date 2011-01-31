@@ -85,6 +85,7 @@ module MingleAPI
     end
     
     def id
+      @attributes['identifier']
     end
 
   end
