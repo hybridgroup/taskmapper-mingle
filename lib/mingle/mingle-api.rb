@@ -66,15 +66,12 @@ module MingleAPI
     end
    
     def update
-         puts 'update'
-         puts element_path(prefix_options) + '?' + encode
          connection.put(element_path(prefix_options) + '?' + encode, nil, self.class.headers).tap do |response|
             load_attributes_from_response(response)
          end
     end
   
     def create
-        puts 'create'
         connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
           self.id = id_from_response(response)
           load_attributes_from_response(response)
@@ -88,7 +85,6 @@ module MingleAPI
     end
     
     def id
-      @attributes['identifier']          
     end
 
   end
