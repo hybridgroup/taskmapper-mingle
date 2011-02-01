@@ -52,6 +52,10 @@ module MingleAPI
   class Project < Base
 
     #begin monkey patches
+    
+    def new?
+      !self.class.exists?(id)
+    end
 
     def element_path(options = nil)
        self.class.element_path(self.id, options)
@@ -60,8 +64,8 @@ module MingleAPI
     def encode(options={})
        val = []
        attributes.each_pair do |key, value|
-          val << "project[#{URI.escape key}]=#{URI.escape value}" rescue nil
-        end  
+         val << "project[#{URI.escape key}]=#{URI.escape value}" rescue nil
+       end  
        val.join('&')
     end
    
