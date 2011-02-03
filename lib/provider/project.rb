@@ -14,12 +14,14 @@ module TicketMaster::Provider
       #def updated_at
        #@updated_at ||= self[:updated_at] ? Time.parse(self[:updated_at]) : nil
       #end
+      def id
+        self[:identifier]
+      end
 
       def initialize(*options)
         super(*options)
       end
 
-      
       # copy from this.copy(that) copies that into this
       def copy(project)
         project.tickets.each do |ticket|
@@ -29,10 +31,6 @@ module TicketMaster::Provider
             sleep 1
           end
         end
-      end
-
-      def id
-        self[:identifier]
       end
 
     end

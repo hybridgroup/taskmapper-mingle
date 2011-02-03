@@ -52,9 +52,16 @@ module MingleAPI
   class Project < Base
 
     #begin monkey patches
+
+    def exists?(id, options = {})
+      self.class.find(id)
+      true
+    rescue ActiveResource::ResourceNotFound, ActiveResource::ResourceGone
+       false
+    end
     
     def new?
-      !self.class.exists?(id)
+      !self.exists?(id)
     end
 
     def element_path(options = nil)
@@ -70,17 +77,21 @@ module MingleAPI
     end
    
     def update
+         puts element_path(prefix_options) + '?' + encode
          connection.put(element_path(prefix_options) + '?' + encode, nil, self.class.headers).tap do |response|
             load_attributes_from_response(response)
          end
     end
   
     def create
+        puts collection_path + '?' + encode
         connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
           self.id = id_from_response(response)
           load_attributes_from_response(response)
         end
     end
+
+
 
     #end monkey patches
  
@@ -91,6 +102,7 @@ module MingleAPI
     def id
       @attributes['identifier']
     end
+
 
   end
 
