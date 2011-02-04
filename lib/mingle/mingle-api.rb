@@ -76,36 +76,53 @@ module MingleAPI
        val.join('&')
     end
    
-    def update
-         puts element_path(prefix_options) + '?' + encode
-         connection.put(element_path(prefix_options) + '?' + encode, nil, self.class.headers).tap do |response|
-            load_attributes_from_response(response)
-         end
-    end
-  
     def create
-        puts collection_path + '?' + encode
         connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
           self.id = id_from_response(response)
           load_attributes_from_response(response)
         end
     end
 
-
-
     #end monkey patches
  
     def tickets(options = {})
-      Ticket.find(:all, :params => options.update(:identifier => identifier))
+      Card.find(:all, :params => options.update(:identifier => id))
     end
     
     def id
       @attributes['identifier']
     end
 
-
   end
 
   class Card < Base
+    self.site_format << '/projects/:identifier/'
+
+    def element_path(options = nil)
+      self.class.element_path(self.id, options)
+    end
+
+    def encode(options={})
+      val = []
+      attributes.each_pair do |key, value|
+        val << "card[#{URI.escape key}]=#{URI.escape value}" rescue nil
+      end
+      val.join('&')
+    end
+
+    def update
+      connection.put(element_path(prefix_options) + '?' + encode, nil, self.class.headers).tap do |response|
+        load_attributes_from_response(response)
+      end
+    end
+
+    def create
+      connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
+        self.id = id_from_response(response)
+        load_attributes_from_response(response)
+      end
+    end
+
   end
+
 end
