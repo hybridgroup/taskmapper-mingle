@@ -7,19 +7,27 @@ module TicketMaster::Provider
       API = MingleAPI::Project # The class to access the api's projects
       # declare needed overloaded methods here
      
-      #def created_at
-       #@created_at ||= self[:created_at] ? Time.parse(self[:created_at]) : nil
-      #end
-
-      #def updated_at
-       #@updated_at ||= self[:updated_at] ? Time.parse(self[:updated_at]) : nil
-      #end
       def id
         self[:identifier]
       end
 
       def initialize(*options)
         super(*options)
+      end
+
+      def tickets(*options)
+        begin
+          if options.first.is_a? Hash
+            #options[0].merge!(:params => {:id => id})
+            super(*options)
+          elsif options.empty?
+            tickets = MingleAPI::Card.find(:all, :params => {:identifier => id}).collect { |ticket| TicketMaster::Provider::Mingle::Ticket.new ticket }
+          else
+            super(*options)
+          end
+        rescue
+          []
+        end
       end
 
       # copy from this.copy(that) copies that into this

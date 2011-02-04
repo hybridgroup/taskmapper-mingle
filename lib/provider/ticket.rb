@@ -2,9 +2,9 @@ module TicketMaster::Provider
   module Mingle
     # Ticket class for ticketmaster-mingle
     #
-    
+    API = MingleAPI::Card
+
     class Ticket < TicketMaster::Provider::Base::Ticket
-      API = MingleAPI::Card # The class to access the api's tickets
       # declare needed overloaded methods herea
       
       def initialize(*object)
@@ -26,8 +26,33 @@ module TicketMaster::Provider
         end
       end
 
+      def self.find_by_id(project_id, ticket_number)
+        self.search(project_id, {'number' => ticket_number}).first
+      end
+
+      def self.search(project_id, options = {}, limit = 1000)
+        tickets = API.find(:all, :params => {:identifier => project_id}).collect { |ticket| self.new ticket, project_id }
+        search_by_attribute(tickets, options, limit)
+      end
+
+      def self.find_by_attributes(project_id, attributes = {})
+        self.search(project_id, attributes)
+      end
+
       def id
        self[:number].to_i
+      end
+
+      def project_id
+        self[:identifier]
+      end
+
+      def title
+        self[:name]
+      end
+
+      def description
+        self[:description]
       end
 
       
