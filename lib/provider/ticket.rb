@@ -9,21 +9,31 @@ module TicketMaster::Provider
       
       def initialize(*object)
         if object.first
-          object = object.first
+          args = object
+          object = args.shift
+          project_id = args.shift
           @system_data = {:client => object}
           unless object.is_a? Hash
-           hash = { :number => object.number,
-                    :name => object.name,
-                    :description => object.description,
-                    :card_type => object.card_type.name,
-                    :project_id => object.project.identifier,
-                    :created_on => object.created_on,
-                    :modified_on => object.modified_on}
+           hash = {:number => object.number,
+                   :name => object.name,
+                   :description => object.description,
+                   :card_type_name => object.card_type.name,
+                   :identifier => project_id,
+                   :created_on => object.created_on,
+                   :modified_on => object.modified_on,
+                   :properties => object.properties}
           else
             hash = object
           end
           super hash
         end
+      end
+
+      def self.create(*options)
+        card = API.new(*options)
+        ticket = self.new card
+        card.save
+        ticket
       end
 
       def self.find_by_id(project_id, ticket_number)
@@ -39,7 +49,7 @@ module TicketMaster::Provider
         self.search(project_id, attributes)
       end
 
-      def id
+      def number
        self[:number].to_i
       end
 
@@ -54,6 +64,11 @@ module TicketMaster::Provider
       def description
         self[:description]
       end
+
+      def status
+        self.properties[1].value
+      end
+
 
       
     end

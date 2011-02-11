@@ -98,14 +98,26 @@ module MingleAPI
   class Card < Base
     self.site_format << '/projects/:identifier/'
 
+    #begin monkey patches
+
     def element_path(options = nil)
-      self.class.element_path(self.id, options)
+      self.class.element_path(self.number, options)
     end
 
     def encode(options={})
       val = []
       attributes.each_pair do |key, value|
-        val << "card[#{URI.escape key}]=#{URI.escape value}" rescue nil
+        if key == 'card_type'
+          if value.is_a? Hash
+            val << "card[card_type_name]=#{URI.escape value[:name]}" rescue nil
+          else
+             val << "card[card_type_name]=#{URI.escape value.name}" rescue nil
+          end
+        elsif key == 'properties' 
+          value.each {|property| val << "card[properties][][name]=#{URI.escape property[0]}&card[properties][][value]=#{URI.escape property[1]}"} rescue NoMethodError
+        else
+          val << "card[#{URI.escape key.to_s}]=#{URI.escape value.to_s}" rescue nil
+        end
       end
       val.join('&')
     end
@@ -118,10 +130,37 @@ module MingleAPI
 
     def create
       connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
-        self.id = id_from_response(response)
+        self.number = id_from_response(response)
         load_attributes_from_response(response)
       end
     end
+
+    #end monkey patches
+
+    def number
+      @attributes['number']
+    end
+
+    def created_on
+      @attributes['created_on']
+    end
+
+    def modified_on
+      @attributes['modified_on']
+    end
+
+    def description
+      @attributes['description']
+    end
+
+    def card_type_name
+      @attributes['card_type_name']
+    end
+
+    def properties
+      @attributes['properties']
+    end
+
 
   end
 
