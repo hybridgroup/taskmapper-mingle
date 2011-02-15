@@ -16,7 +16,7 @@ describe "Ticketmaster::Provider::Mingle::Ticket" do
   end
 
   before(:each) do 
-    @ticketmaster = TicketMaster.new(:mingle, {:server => 'mingle.server', :port => '8080', :username => 'anymoto', :password => '000000'})
+    @ticketmaster = TicketMaster.new(:mingle, {:server => 'myserver.com', :username => 'anymoto', :password => '000000'})
     @project = @ticketmaster.project(@project_id)
     @klass = TicketMaster::Provider::Mingle::Ticket
   end
