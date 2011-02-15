@@ -14,16 +14,16 @@ module MingleAPI
     attr_accessor :username, :password, :host_format, :account_format, :domain_format, :protocol
 
     #Sets up basic authentication credentials for all the resources.
-    def authenticate(server, port, username, login)
+    def authenticate(server, username, login)
       @server    = server
-      @port      = port
       @username  = username
       @password  = login
       self::Base.user = username
       self::Base.password = login
 
       resources.each do |klass|
-        klass.site = klass.site_format % (host_format % [protocol, account_format % [username, login], domain_format % [server, "#{port}"]])
+        klass.site = "http://#{username}:#{login}@#{server}"
+        #klass.site = klass.site_format % (host_format % [protocol, account_format % [username, login], domain_format % [server, "#{port}"]])
         klass.headers['Content-Type'] = 'application/x-www-form-urlencoded'
       end
     end
@@ -33,10 +33,10 @@ module MingleAPI
     end
   end
 
-  self.host_format    = '%s://%s@%s/api/v2'
-  self.account_format = '%s:%s'
-  self.domain_format  = '%s:%s'
-  self.protocol       = 'http'
+  #self.host_format    = '%s://%s@%s/api/v2'
+  #self.account_format = '%s:%s'
+  #self.domain_format  = '%s:%s'
+  #self.protocol       = 'http'
 
   class Base < ActiveResource::Base
     def self.inherited(base)
@@ -107,14 +107,18 @@ module MingleAPI
     def encode(options={})
       val = []
       attributes.each_pair do |key, value|
-        if key == 'card_type'
+        case key 
+        when 'card_type'
           if value.is_a? Hash
-            val << "card[card_type_name]=#{URI.escape value[:name]}" rescue nil
-          else
-             val << "card[card_type_name]=#{URI.escape value.name}" rescue nil
+            name = value[:name]
+         else
+            name = value.name
           end
-        elsif key == 'properties' 
-          value.each {|property| val << "card[properties][][name]=#{URI.escape property[0]}&card[properties][][value]=#{URI.escape property[1]}"} rescue NoMethodError
+           val << "card[card_type_name]=#{URI.escape name}" rescue nil
+        when 'properties' 
+          value.each {|property| 
+            val << "card[properties][][name]=#{URI.escape property[0]}
+                    &card[properties][][value]=#{URI.escape property[1]}"} rescue NoMethodError
         else
           val << "card[#{URI.escape key.to_s}]=#{URI.escape value.to_s}" rescue nil
         end
@@ -161,6 +165,24 @@ module MingleAPI
       @attributes['properties']
     end
 
+  end
+
+  class Comment < Base
+    self.site_format << '/projects/:identifier/cards/:number'
+
+    def create
+      connection.post(collection_path + '?' + encode, nil, self.class.headers).tap do |response|
+        load_attributes_from_response(response)
+      end
+    end
+
+    def encode(options={})
+      val=[]
+      attributes.each_pair do |key, value|
+        val << "comment[#{URI.escape key}]=#{URI.escape value}" rescue nil
+      end
+      val.join('&')
+    end
 
   end
 
