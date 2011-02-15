@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comment>
+  <content>a new comment</content>
+  <created_by url="http://localhost:8080/api/v2/users/1.xml">
+        <name>bonna</name>
+        <login>bonna</login>
+  </created_by>
+  <created_at type="datetime">2010-04-11T20:18:02Z</created_at>
+</comment>
+

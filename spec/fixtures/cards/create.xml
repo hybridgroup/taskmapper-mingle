@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <card>
+   <name>Show event details in event list</name>
+    <description>
+    </description>
+    <card_type>
+      <name>Story</name>
+    </card_type>
+    <id type="integer">411</id>
+    <number type="integer">44</number>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <version type="integer">1</version>
+    <project_card_rank type="integer">1</project_card_rank>
+    <created_on type="datetime">2009-10-14T09:14:54Z</created_on>
+    <modified_on type="datetime">2009-10-14T09:14:54Z</modified_on>
+    <modified_by url="http://localhost:8080/api/v2/users/1.xml">
+      <name>anne</name>
+      <login>anne</login>
+    </modified_by>
+    <created_by url="http://localhost:8080/api/v2/users/2.xml">
+      <name>jane</name>
+      <login>jane</login>
+    </created_by>
+    <properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Status</name>
+        <value>Closed</value>
+      </property>
+      <property type_description="Managed number list" hidden="false">
+        <name>Estimate</name>
+        <value>4</value>
+      </property>
+      <property type_description="Managed text list" hidden="false">
+        <name>Priority</name>
+        <value nil="true"/>
+      </property>
+    </properties>
+  </card>
+
