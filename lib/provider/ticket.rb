@@ -69,8 +69,26 @@ module TicketMaster::Provider
         self.properties[1].value
       end
 
+      def comments(*options)
+        begin
+          if options.first.is_a? Hash
+            super(*options)
+          elsif options.empty?
+            comments = MingleAPI::Comment.find(:all, :params => {:identifier => project_id, :number => number}).collect { |comment| TicketMaster::Provider::Mingle::Comment.new comment }
+          else
+            super(*options)
+          end
+        rescue
+         [] 
+        end
+      end
 
-      
+      def comment!(*options)
+        options[0].merge!(:identifier => project_id, :number => number) if options.first.is_a?(Hash)
+        MingleAPI::Comment.create(*options)
+      end
+    
     end
+
   end
 end
