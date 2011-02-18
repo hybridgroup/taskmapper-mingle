@@ -2,14 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Mingle::Project" do
   before(:all) do
-    headers = {'Authorization' => 'Basic Y29yZWQ6MTIzNDU2', 'Accept' => 'application/xml'}
-    headers_post_put = {'Authorization' => 'Basic Y29yZWQ6MTIzNDU2', 'Content-Type' => 'application/xml'}
-    @project_id = 'test-project'
+    headers = {'Authorization' => 'Basic OjAwMDAwMA==', 'Accept' => 'application/xml'}
+    headers_post = {'Authorization' => 'Basic OjAwMDAwMA==', 'Content-Type' => 'application/xml'}
+    @identifier = 'test_project'
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/projects.xml', headers, fixture_for('projects'), 200
-      mock.get '/projects/test-project.xml', headers, fixture_for('projects/test-project'), 200
-      mock.put '/projects/new-project.xml', headers_post_put, '', 200
-      mock.post '/projects.xml', headers_post_put, '', 200
+      mock.get '/api/v2/projects.xml', headers, fixture_for('projects'), 200
+      mock.get '/api/v2/projects/test_project.xml', headers, fixture_for('projects/test_project'), 200
+      #mock.get '/api/v2/projects/dumb.xml', headers, fixture_for('projects/dumb'), 200
+      mock.post '/api/v2/projects.xml', headers_post, '', 201#, 'Location' => '/projects/dumb'
     end
   end
 
@@ -24,35 +24,32 @@ describe "Ticketmaster::Provider::Mingle::Project" do
   end
 
   it "should be able to load projects from an array of id's" do 
-    @projects = @ticketmaster.projects([@project_id])
+    @projects = @ticketmaster.projects([@identifier])
     @projects.should be_an_instance_of(Array)
     @projects.first.should be_an_instance_of(@klass)
-    @projects.first.id.should == @project_id
+    @projects.first.identifier.should == @identifier
   end
 
   it "should be able to load all projects from attributes" do 
-    @projects = @ticketmaster.projects(:id => 'test-project')
+    @projects = @ticketmaster.projects(:identifier => 'test_project')
     @projects.should be_an_instance_of(Array)
     @projects.first.should be_an_instance_of(@klass)
-    @projects.first.id.should == 'test-project'
+    @projects.first.identifier.should == 'test_project'
   end
 
   it "should be able to find a project" do 
     @ticketmaster.project.should == @klass
-    @ticketmaster.project.find(@project_id).should be_an_instance_of(@klass)
+    @ticketmaster.project.find(@identifier).should be_an_instance_of(@klass)
   end
 
   it "should be able to find a project by identifier" do 
-    @ticketmaster.project(@project_id).should be_an_instance_of(@klass)
-    @ticketmaster.project(@project_id).identifier.should == @project_id
-  end
-
-  it "should be able to update and save a project" do
-    @project = @ticketmaster.project(@project_id)
-    @project.update!(:name => 'New project name').should == true
+    @ticketmaster.project(@identifier).should be_an_instance_of(@klass)
+    @ticketmaster.project(@identifier).identifier.should == @identifier
   end
 
   it "should be able to create a new project" do 
-    @project = @ticketmaster.project!(:name => 'New project', :description => 'This is a new project').should be_an_instance_of(@klass)
+    @project = @ticketmaster.project!(:name => 'Another project', :identifier => 'dumb', :description => 'This is a another project').should be_an_instance_of(@klass)
   end
+
+
 end

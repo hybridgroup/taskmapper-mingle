@@ -2,28 +2,24 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Ticketmaster::Provider::Mingle::Comment" do
   before(:all) do
-    headers = {'Authorization' => 'Basic Zm9vOjAwMDAwMA==', 'Accept' => 'application/xml'}
-    headers_post = {'Authorization' => 'Basic Zm9vOjAwMDAwMA==', 'Content-Type' => 'application/xml'}
+    headers = {'Authorization' => 'Basic MDAwMDAwOg==', 'Accept' => 'application/xml'}
+    headers_post = {'Authorization' => 'Basic MDAwMDAwOg==', 'Content-Type' => 'application/xml'}
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get '/api/v2/projects/33042.xml', headers, fixture_for('projects/33042'), 200
-      mock.get '/api/v2/projects/33042/cards.xml', headers, fixture_for('cards'), 200
-      mock.get '/api/v2/projects/33042/cards/476834.xml', headers, fixture_for('cards/476834'), 200
-      mock.put '/api/v2/projects/33042/cards/476834.xml', headers_post_put, '', 200
-      mock.get '/api/v2/projects/33042/cards/476834/comments.xml', headers, fixture_for('comments'), 200
-      mock.get '/api/v2/projects/33042/cards/476834/comments/0.xml', headers, fixture_for('comments/0'), 200
-      mock.get '/api/v1/projects/33042/cards/476834/comments/2.xml', headers, fixture_for('comments/2'), 200
-      mock.get '/api/v1/projects/33042/cards/476834/comments/3.xml', headers, fixture_for('comments/3'), 200
-      mock.post '/api/v1/projects/33042/cards/476834/comments.xml', headers_post_put, fixture_for('comments/create'), 200
+      mock.get '/api/v2/projects/test_project.xml', headers, fixture_for('projects/test_project'), 200
+      mock.get '/api/v2/projects/test_project/cards.xml', headers, fixture_for('cards'), 200
+      mock.get '/api/v2/projects/test_project/cards/42.xml', headers, fixture_for('cards/42'), 200
+      mock.get '/api/v2/projects/test_project/cards/42/comments.xml', headers, fixture_for('comments'), 200
+      mock.post '/api/v2/projects/test_project/cards/42/comments.xml?comment[content]=New%20comment%20created.', headers_post, fixture_for('comments/create'), 200
     end
-    @project_id = 33042
-    @ticket_id = 476834
+    @identifier = 'test_project'
+    @number = 42
   end
   
   before(:each) do
-    @ticketmaster = TicketMaster.new(:mingle, :name => 'anymoto', :login => '000000', :server => 'myserver.com')
-    @project = @ticketmaster.project(@project_id)
-    @ticket = @project.ticket(@ticket_id)
-    @ticket.project_id = @project.id
+    @ticketmaster = TicketMaster.new(:mingle, {:name => 'anymoto', :login => '000000', :server => 'localhost:8080'})
+    @project = @ticketmaster.project(@identifier)
+    @ticket = @project.ticket(@number)
+    @ticket.identifier = @project.identifier
     @klass = TicketMaster::Provider::Mingle::Comment
   end
   
@@ -33,37 +29,12 @@ describe "Ticketmaster::Provider::Mingle::Comment" do
     @comments.first.should be_an_instance_of(@klass)
   end
   
-  it "should be able to load all comments based on 'id's" do
-    @comments = @ticket.comments([0,2,3])
-    @comments.should be_an_instance_of(Array)
-    @comments.first.id.should == 0
-    @comments.last.id.should == 3
-    @comments[1].should be_an_instance_of(@klass)
-  end
-  
-  it "should be able to load all comments based on attributes" do
-    @comments = @ticket.comments(:parent_id => @ticket.id)
-    @comments.should be_an_instance_of(Array)
-    @comments.first.should be_an_instance_of(@klass)
-  end
-  
-  it "should be able to load a comment based on id" do
-    @comment = @ticket.comment(2)
-    @comment.should be_an_instance_of(@klass)
-    @comment.id.should == 2
-  end
-  
-  it "should be able to load a comment based on attributes" do
-    @comment = @ticket.comment(:parent_id => @ticket.id)
-    @comment.should be_an_instance_of(@klass)
-  end
-  
   it "should return the class" do
     @ticket.comment.should == @klass
   end
   
   it "should be able to create a comment" do
-    @comment = @ticket.comment!(:body => 'New comment created.')
+    @comment = @ticket.comment!(:content => 'New comment created.')
     @comment.should be_an_instance_of(@klass)
   end
 end
