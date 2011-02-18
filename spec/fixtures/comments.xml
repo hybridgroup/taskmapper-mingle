@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<card_comments type="array">
+    <comment>
+      <content>Hi</content>
+      <created_by url="http://localhost:8080/api/v2/users/21.xml">
+        <name>Jeff</name>
+        <login>j</login>
+      </created_by>
+      <created_at type="datetime">2010-03-10T21:16:39Z</created_at>
+    </comment>
+    <comment>
+      <content>hello there</content>
+      <created_by url="http://localhost:8080/api/v2/users/1.xml">
+        <name>bonna</name>
+        <login>bonna</login>
+      </created_by>
+      <created_at type="datetime">2010-03-10T21:16:02Z</created_at>
+    </comment>
+</card_comments>
+
