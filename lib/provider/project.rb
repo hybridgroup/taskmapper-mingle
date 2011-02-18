@@ -15,6 +15,10 @@ module TicketMaster::Provider
         super(*options)
       end
 
+      #def exists?
+        #API.exists?(id)
+      #end
+
       def tickets(*options)
         begin
           if options.first.is_a? Hash
@@ -38,9 +42,9 @@ module TicketMaster::Provider
       # copy from this.copy(that) copies that into this
       def copy(project)
         project.tickets.each do |ticket|
-          copy_ticket = self.ticket!(:title => ticket.title, :description => ticket.description)
+          copy_ticket = self.ticket!(:name => ticket.title, :description => ticket.description)
           ticket.comments.each do |comment|
-            copy_ticket.comment!(:body => comment.body)
+            copy_ticket.comment!(:content => comment.body)
             sleep 1
           end
         end

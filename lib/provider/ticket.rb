@@ -11,14 +11,14 @@ module TicketMaster::Provider
         if object.first
           args = object
           object = args.shift
-          project_id = args.shift
+          identifier = args.shift
           @system_data = {:client => object}
           unless object.is_a? Hash
            hash = {:number => object.number,
                    :name => object.name,
                    :description => object.description,
-                   :card_type_name => object.card_type.name,
-                   :identifier => project_id,
+                   :card_type_name => object.card_type.nil? ? "Card" : object.card_type.name,
+                   :identifier => identifier,
                    :created_on => object.created_on,
                    :modified_on => object.modified_on,
                    :properties => object.properties}
@@ -36,24 +36,32 @@ module TicketMaster::Provider
         ticket
       end
 
-      def self.find_by_id(project_id, ticket_number)
-        self.search(project_id, {'number' => ticket_number}).first
+      def self.find_by_id(identifier, number)
+        self.search(identifier, {'number' => number}).first
       end
 
-      def self.search(project_id, options = {}, limit = 1000)
-        tickets = API.find(:all, :params => {:identifier => project_id}).collect { |ticket| self.new ticket, project_id }
+      def self.search(identifier, options = {}, limit = 1000)
+        tickets = API.find(:all, :params => {:identifier => identifier}).collect { |ticket| self.new ticket, identifier }
         search_by_attribute(tickets, options, limit)
       end
 
-      def self.find_by_attributes(project_id, attributes = {})
-        self.search(project_id, attributes)
+      def self.find_by_attributes(identifier, attributes = {})
+        self.search(identifier, attributes)
       end
 
       def number
        self[:number].to_i
       end
 
-      def project_id
+      def id
+        self[:id].to_i
+      end
+
+      def name
+        self[:name]
+      end
+
+      def identifier
         self[:identifier]
       end
 
@@ -71,10 +79,8 @@ module TicketMaster::Provider
 
       def comments(*options)
         begin
-          if options.first.is_a? Hash
-            super(*options)
-          elsif options.empty?
-            comments = MingleAPI::Comment.find(:all, :params => {:identifier => project_id, :number => number}).collect { |comment| TicketMaster::Provider::Mingle::Comment.new comment }
+          if options.empty?
+            comments = MingleAPI::Comment.find(:all, :params => {:identifier => identifier, :number => number}).collect { |comment| TicketMaster::Provider::Mingle::Comment.new comment }
           else
             super(*options)
           end
@@ -83,9 +89,11 @@ module TicketMaster::Provider
         end
       end
 
+      #def comment(*options)
+
       def comment!(*options)
-        options[0].merge!(:identifier => project_id, :number => number) if options.first.is_a?(Hash)
-        MingleAPI::Comment.create(*options)
+        options[0].update(:identifier => identifier, :number => number) if options.first.is_a?(Hash)
+        Comment.create(*options)
       end
     
     end

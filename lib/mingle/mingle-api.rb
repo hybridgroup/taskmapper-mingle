@@ -11,20 +11,18 @@ require 'active_resource'
 module MingleAPI
   class Error < StandardError; end
   class << self
-    attr_accessor :username, :password, :host_format, :account_format, :domain_format, :protocol
+    #attr_accessor :username, :password, :host_format, :account_format, :domain_format, :protocol
 
     #Sets up basic authentication credentials for all the resources.
-    def authenticate(server, username, login)
+    def authenticate(server, login, password)
       @server    = server
-      @username  = username
-      @password  = login
-      self::Base.user = username
-      self::Base.password = login
+      @username  = login
+      @password  = password
+      self::Base.user = login
+      self::Base.password = password
 
       resources.each do |klass|
-        klass.site = "http://#{username}:#{login}@#{server}"
-        #klass.site = klass.site_format % (host_format % [protocol, account_format % [username, login], domain_format % [server, "#{port}"]])
-        klass.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        klass.site = klass.site_format % "http://#{login}:#{password}@#{server}/api/v2"
       end
     end
 
@@ -32,11 +30,6 @@ module MingleAPI
       @resources ||= []
     end
   end
-
-  #self.host_format    = '%s://%s@%s/api/v2'
-  #self.account_format = '%s:%s'
-  #self.domain_format  = '%s:%s'
-  #self.protocol       = 'http'
 
   class Base < ActiveResource::Base
     def self.inherited(base)
@@ -53,7 +46,7 @@ module MingleAPI
 
     #begin monkey patches
 
-    def exists?(id, options = {})
+    def exists?(identifier, options = {})
       self.class.find(id)
       true
     rescue ActiveResource::ResourceNotFound, ActiveResource::ResourceGone
@@ -65,7 +58,7 @@ module MingleAPI
     end
 
     def element_path(options = nil)
-       self.class.element_path(self.id, options)
+       self.class.element_path(self.identifier, options)
     end
 
     def encode(options={})
@@ -107,20 +100,22 @@ module MingleAPI
     def encode(options={})
       val = []
       attributes.each_pair do |key, value|
-        case key 
-        when 'card_type'
-          if value.is_a? Hash
-            name = value[:name]
-         else
-            name = value.name
+        unless value.nil?
+          case key 
+          when 'card_type'
+            if value.is_a? Hash
+              name = value[:name]
+            else
+              name = value.name
+            end
+            val << "card[card_type_name]=#{URI.escape name}"
+          when 'properties' 
+            value.each {|property| 
+              val << "card[properties][][name]=#{URI.escape property[0]}
+                      &card[properties][][value]=#{URI.escape property[1]}"} rescue NoMethodError
+          else
+            val << "card[#{URI.escape key.to_s}]=#{URI.escape value.to_s}" rescue nil
           end
-           val << "card[card_type_name]=#{URI.escape name}" rescue nil
-        when 'properties' 
-          value.each {|property| 
-            val << "card[properties][][name]=#{URI.escape property[0]}
-                    &card[properties][][value]=#{URI.escape property[1]}"} rescue NoMethodError
-        else
-          val << "card[#{URI.escape key.to_s}]=#{URI.escape value.to_s}" rescue nil
         end
       end
       val.join('&')
@@ -145,6 +140,14 @@ module MingleAPI
       @attributes['number']
     end
 
+    def id
+      @attributes['id']
+    end
+
+    def name
+      @attributes['name']
+    end
+
     def created_on
       @attributes['created_on']
     end
@@ -157,8 +160,8 @@ module MingleAPI
       @attributes['description']
     end
 
-    def card_type_name
-      @attributes['card_type_name']
+    def card_type
+      @attributes['card_type']
     end
 
     def properties

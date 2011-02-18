@@ -16,10 +16,10 @@ module TicketMaster::Provider
     def authorize(auth = {})
       @authentication ||= TicketMaster::Authenticator.new(auth)
       auth = @authentication
-      if auth.server.blank? and auth.port.blank? and auth.name.blank? and auth.login.blank?
-        raise "Please provide server, port, name and login"
+      if auth.server.blank? and auth.login.blank? and auth.password.blank?
+        raise "Please provide server, login and password"
       end
-      MingleAPI.authenticate(auth.server, auth.port, auth.name, auth.login)
+      MingleAPI.authenticate(auth.server, auth.login, auth.password)
     end
       # declare needed overloaded methods here
     

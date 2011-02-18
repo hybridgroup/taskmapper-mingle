@@ -6,7 +6,7 @@ module TicketMaster::Provider
     # versions of the ticket.
     #
     class Comment < TicketMaster::Provider::Base::Comment
-      #API = MingleAPI::Comment # The class to access the api's comments
+    API = MingleAPI::Comment # The class to access the api's comments
       # declare needed overloaded methods here
       
       def initialize(*object)
@@ -25,8 +25,6 @@ module TicketMaster::Provider
           super hash
         end
       end
-
-      #def self.find(project_id, ticket
 
       def created_by
         self[:created_by]
