@@ -6,9 +6,8 @@
     <card_type>
       <name>Story</name>
     </card_type>
-    <id type="integer">409</id>
     <number type="integer">42</number>
-    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+    <project url="http://myserver.com/api/v2/projects/test_project.xml">
       <name>test project</name>
       <identifier>test_project</identifier>
     </project>
@@ -16,11 +15,11 @@
     <project_card_rank type="integer">1</project_card_rank>
     <created_on type="datetime">2009-10-14T09:14:54Z</created_on>
     <modified_on type="datetime">2009-10-14T09:14:54Z</modified_on>
-    <modified_by url="http://localhost:8080/api/v2/users/1.xml">
+    <modified_by url="http://myserver.com/api/v2/users/1.xml">
       <name>anne</name>
       <login>anne</login>
     </modified_by>
-    <created_by url="http://localhost:8080/api/v2/users/2.xml">
+    <created_by url="http://myserver.com/api/v2/users/2.xml">
       <name>jane</name>
       <login>jane</login>
     </created_by>
