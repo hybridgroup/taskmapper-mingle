@@ -37,12 +37,16 @@ You can find your own projects by doing:
       
         comments = project.ticket.comments 
 
+## Creating a comment
+
+        comment = ticket.comment!(:content => 'New comment created.')
+
 ## Requirements
 
 * rubygems (obviously)
 * ticketmaster gem (latest version preferred)
 * jeweler gem (only if you want to repackage and develop)
-* trac4r
+* Mingle
 
 The ticketmaster gem should automatically be installed during the installation of this gem if it is not already installed.
 
