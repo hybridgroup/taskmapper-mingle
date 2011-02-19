@@ -11,7 +11,6 @@ require 'active_resource'
 module MingleAPI
   class Error < StandardError; end
   class << self
-    #attr_accessor :username, :password, :host_format, :account_format, :domain_format, :protocol
 
     #Sets up basic authentication credentials for all the resources.
     def authenticate(server, login, password)
@@ -41,6 +40,31 @@ module MingleAPI
       super
     end
   end
+
+  # Find projects
+  #
+  #   MingleAPI::Project.find(:all) # find all projects for the current account.
+  #   MingleAPI::Project.find('my_project')   # find individual project by ID
+  #
+  # Creating a Project
+  #
+  #   project = MingleAPI::Project.new(:name => 'Ninja Whammy Jammy')
+  #   project.save
+  #   # => true
+  #
+  #
+  # Updating a Project
+  #
+  #   project = MingleAPI::Project.find('my_project')
+  #   project.name = "A new name"
+  #   project.save
+  #
+  # Finding tickets
+  # 
+  #   project = MingleAPI::Project.find('my_project')
+  #   project.tickets
+  #
+
 
   class Project < Base
 
@@ -89,6 +113,16 @@ module MingleAPI
     end
 
   end
+
+  # Find tickets
+  #
+  #  MingleAPI::Ticket.find(:all, :params => { :identifier => 'my_project' })
+  #
+  #  project = UnfuddleAPI::Project.find('my_project')
+  #  project.tickets
+  #  project.tickets(:name => 'a new name')
+  #
+
 
   class Card < Base
     self.site_format << '/projects/:identifier/'
