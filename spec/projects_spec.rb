@@ -9,7 +9,7 @@ describe "Ticketmaster::Provider::Mingle::Project" do
       mock.get '/api/v2/projects.xml', headers, fixture_for('projects'), 200
       mock.get '/api/v2/projects/test_project.xml', headers, fixture_for('projects/test_project'), 200
       #mock.get '/api/v2/projects/dumb.xml', headers, fixture_for('projects/dumb'), 200
-      mock.post '/api/v2/projects.xml', headers_post, '', 201#, 'Location' => '/projects/dumb'
+      mock.post '/api/v2/projects.xml', headers_post, '', 200, 'Location' => '/projects/dumb'
     end
   end
 
