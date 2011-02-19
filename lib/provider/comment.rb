@@ -14,7 +14,7 @@ module TicketMaster::Provider
           object = object.first
           @system_data = {:client => object}
           unless object.is_a? Hash
-            hash = {:body => object.content,
+            hash = {:content => object.content,
                     :created_at => object.created_at,
                     :created_by => object.created_by,
                     :ticket_id => object.prefix_options[:number],
