@@ -8,8 +8,8 @@ describe "Ticketmaster::Provider::Mingle::Project" do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get '/api/v2/projects.xml', headers, fixture_for('projects'), 200
       mock.get '/api/v2/projects/test_project.xml', headers, fixture_for('projects/test_project'), 200
-      #mock.get '/api/v2/projects/dumb.xml', headers, fixture_for('projects/dumb'), 200
-      mock.post '/api/v2/projects.xml', headers_post, '', 200, 'Location' => '/projects/dumb'
+      mock.get '/api/v2/projects/dumb.xml', headers, fixture_for('projects/create'), 404
+      mock.post '/api/v2/projects.xml?project[name]=Another%20project&project[description]=This%20is%20a%20another%20project&project[identifier]=dumb', headers_post, '', 200, 'Location' => '/projects/dumb'
     end
   end
 
