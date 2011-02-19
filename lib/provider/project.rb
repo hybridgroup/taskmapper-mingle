@@ -15,10 +15,6 @@ module TicketMaster::Provider
         super(*options)
       end
 
-      #def exists?
-        #API.exists?(id)
-      #end
-
       def tickets(*options)
         begin
           if options.first.is_a? Hash

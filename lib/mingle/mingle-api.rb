@@ -46,11 +46,13 @@ module MingleAPI
 
     #begin monkey patches
 
-    def exists?(identifier, options = {})
-      self.class.find(id)
-      true
-    rescue ActiveResource::ResourceNotFound, ActiveResource::ResourceGone
-       false
+    def exists?(id, options = {})
+      begin
+        self.class.find(id)
+        true
+      rescue ActiveResource::ResourceNotFound, ActiveResource::ResourceGone
+        false
+      end
     end
     
     def new?
@@ -58,7 +60,7 @@ module MingleAPI
     end
 
     def element_path(options = nil)
-       self.class.element_path(self.identifier, options)
+       self.class.element_path(self.id, options)
     end
 
     def encode(options={})
