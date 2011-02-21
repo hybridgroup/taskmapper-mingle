@@ -30,7 +30,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.0.0)
-  jeweler (~> 1.5.2)
+  jeweler (~> 1.5.1)
   rcov
   rspec (= 1.2.9)
   ticketmaster (= 0.5.2)

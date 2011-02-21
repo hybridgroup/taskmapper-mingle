@@ -17,9 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Ticketmaster Provider for Mingle}
   gem.description = %Q{Allows ticketmaster to interact with Mingle}
   gem.email = "ana@hybridgroup.com"
-  gem.authors = ["hybridgroup"]
-  gem.add_dependency "activesupport", ">= 2.3.0"
-  gem.add_dependency "activeresource", ">= 2.3.0"
+  gem.authors = ["Hybridgroup"]
+  gem.add_dependency "activesupport", ">= 3.0.4"
+  gem.add_dependency "activeresource", ">= 3.0.4"
 end
 Jeweler::RubygemsDotOrgTasks.new
 
