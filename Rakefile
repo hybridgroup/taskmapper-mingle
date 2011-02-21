@@ -13,7 +13,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "ticketmaster-mingle"
-  gem.homepage = "http://ticket.rb"
+  gem.homepage = "http://ticketrb.com"
   gem.summary = %Q{Ticketmaster Provider for Mingle}
   gem.description = %Q{Allows ticketmaster to interact with Mingle}
   gem.email = "ana@hybridgroup.com"
