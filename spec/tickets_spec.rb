@@ -11,7 +11,7 @@ describe "Ticketmaster::Provider::Mingle::Ticket" do
       mock.get '/api/v2/projects/test_project/cards/42.xml', headers, fixture_for('cards/42'), 200
       mock.get '/api/v2/projects/test_project/cards.xml', headers, fixture_for('cards'), 200
       mock.get '/api/v2/projects/test_project/cards/42.xml', headers, fixture_for('cards/42'), 200
-      mock.put '/api/v2/projects/test_project/cards/42.xml?card[name]=Ticket%201&card[number]=42&card[created_on]=Wed%20Oct%2014%2009:14:54%20UTC%202009&card[modified_on]=Wed%20Oct%2014%2009:14:54%20UTC%202009&card[id]=0&card[description]=New%20card%20description', headers_post_put, '', 200
+      mock.put '/api/v2/projects/test_project/cards/42.xml?card[number]=42&card[name]=Ticket%201&card[created_on]=Wed%20Oct%2014%2009:14:54%20UTC%202009&card[id]=0&card[modified_on]=Wed%20Oct%2014%2009:14:54%20UTC%202009&card[description]=New%20card%20description', headers_post_put, '', 200
       mock.post '/api/v2/projects/test_project/cards.xml?card[title]=Ticket%20%2312&card[description]=Body', headers_post_put, '', 200
     end
   end
