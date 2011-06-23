@@ -5,10 +5,13 @@ This is a provider for [ticketmaster](http://ticketrb.com). It provides interope
 # Usage and Examples
 
 First we have to instantiate a new ticketmaster instance, your Mingle installation should have api access enable:
-    mingle = TicketMaster.new(:mingle, {:server => 'myserver', :username=> 'foo', :password => 'bar')
+
+    mingle = TicketMaster.new(:mingle, {:server => 'myserver', :username=> 'foo', :password => 'bar'})
+
 If you do not pass in the server name, username and password, you won't get any information.
 
 Also you have to enable basic authentication, set the basic_authentication_enabled configuration option to true in the Mingle data directory/config/auth_config.yml file, where Mingle data directory is the path to the Mingle data directory:
+
     basic_authentication_enabled: true
 
 ## Finding Projects
@@ -35,11 +38,11 @@ You can find your own projects by doing:
 
 ## Finding comments
       
-        comments = project.ticket.comments 
+  comments = project.ticket.comments 
 
 ## Creating a comment
 
-        comment = ticket.comment!(:content => 'New comment created.')
+  comment = ticket.comment!(:content => 'New comment created.')
 
 ## Requirements
 
@@ -69,6 +72,6 @@ If you see or find any issues, feel free to open up an issue report.
 
 ## Copyright
 
-Copyright (c) 2010 The Hybrid Group. See LICENSE for details.
+Copyright (c) 2011 The Hybrid Group. See LICENSE for details.
 
 
