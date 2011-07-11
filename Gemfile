@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "ticketmaster", "0.5.2"
+gem "ticketmaster", "0.6.6"
 
 group :development do
   gem "bundler", "~> 1.0.0"
