@@ -58,6 +58,7 @@ describe "TaskMapper::Provider::Mingle::Ticket" do
   end
 
   it "should be able to update and save a ticket" do 
+    pending
     @ticket = @project.ticket(42)
     @ticket.description = 'New card description'
     @ticket.save.should == true
