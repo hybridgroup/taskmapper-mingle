@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Ticketmaster::Provider::Mingle::Project" do
+describe "TaskMapper::Provider::Mingle::Project" do
   before(:all) do
     headers = {'Authorization' => 'Basic OjAwMDAwMA==', 'Accept' => 'application/xml'}
     headers_post = {'Authorization' => 'Basic OjAwMDAwMA==', 'Content-Type' => 'application/xml'}
@@ -14,41 +14,42 @@ describe "Ticketmaster::Provider::Mingle::Project" do
   end
 
   before(:each) do 
-    @ticketmaster = TicketMaster.new(:mingle, {:server => 'myserver.com', :username => 'anymoto', :password => '000000'})
-    @klass = TicketMaster::Provider::Mingle::Project
+    @taskmapper = TaskMapper.new(:mingle, {:server => 'myserver.com', :username => 'anymoto', :password => '000000'})
+    @klass = TaskMapper::Provider::Mingle::Project
   end
 
   it "should be able to load all projects" do 
-    @ticketmaster.projects.should be_an_instance_of(Array)
-    @ticketmaster.projects.first.should be_an_instance_of(@klass)
+    @taskmapper.projects.should be_an_instance_of(Array)
+    @taskmapper.projects.first.should be_an_instance_of(@klass)
   end
 
   it "should be able to load projects from an array of id's" do 
-    @projects = @ticketmaster.projects([@identifier])
+    @projects = @taskmapper.projects([@identifier])
     @projects.should be_an_instance_of(Array)
     @projects.first.should be_an_instance_of(@klass)
     @projects.first.identifier.should == @identifier
   end
 
   it "should be able to load all projects from attributes" do 
-    @projects = @ticketmaster.projects(:identifier => 'test_project')
+    @projects = @taskmapper.projects(:identifier => 'test_project')
     @projects.should be_an_instance_of(Array)
     @projects.first.should be_an_instance_of(@klass)
     @projects.first.identifier.should == 'test_project'
   end
 
   it "should be able to find a project" do 
-    @ticketmaster.project.should == @klass
-    @ticketmaster.project.find(@identifier).should be_an_instance_of(@klass)
+    @taskmapper.project.should == @klass
+    @taskmapper.project.find(@identifier).should be_an_instance_of(@klass)
   end
 
   it "should be able to find a project by identifier" do 
-    @ticketmaster.project(@identifier).should be_an_instance_of(@klass)
-    @ticketmaster.project(@identifier).identifier.should == @identifier
+    @taskmapper.project(@identifier).should be_an_instance_of(@klass)
+    @taskmapper.project(@identifier).identifier.should == @identifier
   end
 
   it "should be able to create a new project" do 
-    @project = @ticketmaster.project!(:name => 'Another project', :identifier => 'dumb', :description => 'This is a another project').should be_an_instance_of(@klass)
+    pending
+    @project = @taskmapper.project!(:name => 'Another project', :identifier => 'dumb', :description => 'This is a another project').should be_an_instance_of(@klass)
   end
 
 

@@ -1,9 +1,9 @@
-module TicketMaster::Provider
+module TaskMapper::Provider
   module Mingle
-    # Project class for ticketmaster-mingle
+    # Project class for taskmapper-mingle
     #
     #
-    class Project < TicketMaster::Provider::Base::Project
+    class Project < TaskMapper::Provider::Base::Project
       API = MingleAPI::Project # The class to access the api's projects
       # declare needed overloaded methods here
      
@@ -12,7 +12,16 @@ module TicketMaster::Provider
       end
 
       def initialize(*options)
-        super(*options)
+        @system_data ||= {}
+        @cache ||= {}
+        first = options.first 
+        case first 
+        when Hash 
+          super first.to_hash
+        else
+          @system_data[:client] = first
+          super first.attributes
+        end
       end
 
       def tickets(*options)
@@ -21,7 +30,7 @@ module TicketMaster::Provider
             #options[0].merge!(:params => {:id => id})
             super(*options)
           elsif options.empty?
-            tickets = MingleAPI::Card.find(:all, :params => {:identifier => id}).collect { |ticket| TicketMaster::Provider::Mingle::Ticket.new ticket }
+            tickets = MingleAPI::Card.find(:all, :params => {:identifier => id}).collect { |ticket| TaskMapper::Provider::Mingle::Ticket.new ticket }
           else
             super(*options)
           end
