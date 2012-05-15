@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Ticketmaster::Provider::Mingle::Comment" do
+describe "TaskMapper::Provider::Mingle::Comment" do
   before(:all) do
     headers = {'Authorization' => 'Basic MDAwMDAwOg==', 'Accept' => 'application/xml'}
     headers_post = {'Authorization' => 'Basic MDAwMDAwOg==', 'Content-Type' => 'application/xml'}
@@ -16,11 +16,11 @@ describe "Ticketmaster::Provider::Mingle::Comment" do
   end
   
   before(:each) do
-    @ticketmaster = TicketMaster.new(:mingle, {:name => 'anymoto', :login => '000000', :server => 'localhost:8080'})
-    @project = @ticketmaster.project(@identifier)
+    @taskmapper = TaskMapper.new(:mingle, {:name => 'anymoto', :login => '000000', :server => 'localhost:8080'})
+    @project = @taskmapper.project(@identifier)
     @ticket = @project.ticket(@number)
     @ticket.identifier = @project.identifier
-    @klass = TicketMaster::Provider::Mingle::Comment
+    @klass = TaskMapper::Provider::Mingle::Comment
   end
   
   it "should be able to load all comments" do

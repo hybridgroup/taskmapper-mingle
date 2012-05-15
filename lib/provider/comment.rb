@@ -1,11 +1,11 @@
-module TicketMaster::Provider
+module TaskMapper::Provider
   module Mingle
-    # The comment class for ticketmaster-mingle
+    # The comment class for taskmapper-mingle
     #
-    # Do any mapping between Ticketmaster and your system's comment model here
+    # Do any mapping between TaskMapper and your system's comment model here
     # versions of the ticket.
     #
-    class Comment < TicketMaster::Provider::Base::Comment
+    class Comment < TaskMapper::Provider::Base::Comment
     API = MingleAPI::Comment # The class to access the api's comments
       # declare needed overloaded methods here
       

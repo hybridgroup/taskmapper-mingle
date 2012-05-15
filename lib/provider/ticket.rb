@@ -1,10 +1,10 @@
-module TicketMaster::Provider
+module TaskMapper::Provider
   module Mingle
-    # Ticket class for ticketmaster-mingle
+    # Ticket class for taskmapper-mingle
     #
     API = MingleAPI::Card
 
-    class Ticket < TicketMaster::Provider::Base::Ticket
+    class Ticket < TaskMapper::Provider::Base::Ticket
       # declare needed overloaded methods herea
       
       def initialize(*object)
@@ -80,7 +80,7 @@ module TicketMaster::Provider
       def comments(*options)
         begin
           if options.empty?
-            comments = MingleAPI::Comment.find(:all, :params => {:identifier => identifier, :number => number}).collect { |comment| TicketMaster::Provider::Mingle::Comment.new comment }
+            comments = MingleAPI::Comment.find(:all, :params => {:identifier => identifier, :number => number}).collect { |comment| TaskMapper::Provider::Mingle::Comment.new comment }
           else
             super(*options)
           end

@@ -1,13 +1,12 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
-require 'ticketmaster'
-require 'ticketmaster-mingle'
-require 'spec'
-require 'spec/autorun'
+require 'taskmapper'
+require 'taskmapper-mingle'
+require 'rspec'
 
-Spec::Runner.configure do |config|
-  
+RSpec.configure do |config|
+  config.color_enabled = true
 end
 
 def fixture_for(name)

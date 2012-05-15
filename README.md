@@ -1,12 +1,12 @@
-# ticketmaster-mingle
+# taskmapper-mingle
 
-This is a provider for [ticketmaster](http://ticketrb.com). It provides interoperability with [Mingle](http://www.thoughtworks-studios.com/mingle-agile-project-management/) and it's issue tracking system through the ticketmaster gem.
+This is a provider for [taskmapper](http://ticketrb.com). It provides interoperability with [Mingle](http://www.thoughtworks-studios.com/mingle-agile-project-management/) and it's issue tracking system through the taskmapper gem.
 
 # Usage and Examples
 
-First we have to instantiate a new ticketmaster instance, your Mingle installation should have api access enable:
+First we have to instantiate a new taskmapper instance, your Mingle installation should have api access enable:
 
-    mingle = TicketMaster.new(:mingle, {:server => 'myserver', :username=> 'foo', :password => 'bar'})
+    mingle = TaskMapper.new(:mingle, {:server => 'myserver', :username=> 'foo', :password => 'bar'})
 
 If you do not pass in the server name, username and password, you won't get any information.
 
@@ -47,15 +47,15 @@ You can find your own projects by doing:
 ## Requirements
 
 * rubygems (obviously)
-* ticketmaster gem (latest version preferred)
+* taskmapper gem (latest version preferred)
 * jeweler gem (only if you want to repackage and develop)
 * Mingle
 
-The ticketmaster gem should automatically be installed during the installation of this gem if it is not already installed.
+The taskmapper gem should automatically be installed during the installation of this gem if it is not already installed.
 
 ## Other Notes
 
-Since this and the ticketmaster gem is still primarily a work-in-progress, minor changes may be incompatible with previous versions. Please be careful about using and updating this gem in production.
+Since this and the taskmapper gem is still primarily a work-in-progress, minor changes may be incompatible with previous versions. Please be careful about using and updating this gem in production.
 
 If you see or find any issues, feel free to open up an issue report.
 

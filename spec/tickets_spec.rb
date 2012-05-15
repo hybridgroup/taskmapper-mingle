@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Ticketmaster::Provider::Mingle::Ticket" do
+describe "TaskMapper::Provider::Mingle::Ticket" do
   before(:all) do
     headers = {'Authorization' => 'Basic OjAwMDAwMA==', 'Accept' => 'application/xml'}
     headers_post_put = {'Authorization' => 'Basic OjAwMDAwMA==', 'Content-Type' => 'application/xml'}
@@ -17,9 +17,9 @@ describe "Ticketmaster::Provider::Mingle::Ticket" do
   end
 
   before(:each) do 
-    @ticketmaster = TicketMaster.new(:mingle, {:server => 'myserver.com', :username => 'anymoto', :password => '000000'})
-    @project = @ticketmaster.project(@identifier)
-    @klass = TicketMaster::Provider::Mingle::Ticket
+    @taskmapper = TaskMapper.new(:mingle, {:server => 'myserver.com', :username => 'anymoto', :password => '000000'})
+    @project = @taskmapper.project(@identifier)
+    @klass = TaskMapper::Provider::Mingle::Ticket
   end
 
   it "should be able to load all tickets" do 
